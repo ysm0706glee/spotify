@@ -11,6 +11,9 @@ const App = () => {
 
   const [filterByDurationButton, setFilterByDuration] = useState(false);
 
+  const [isFocused, setIsFocused] = useState(false);
+  const [history, setHistory] = useState([]);
+
   useEffect(() => {
     const getRandomMusic = async () => {
       try {
@@ -35,6 +38,25 @@ const App = () => {
           `https://gj05ju1755.execute-api.eu-west-1.amazonaws.com/dev/codechallenge/music/search/${searchWord}`
         );
         setSearchMusic(res.data.items);
+        setHistory([searchWord, ...history]);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    setRamdomMusic([]);
+    setFilterByDuration(false);
+    setHistory(false);
+    getSearchMusic();
+  };
+
+  const handleHistory = (e, x) => {
+    e.preventDefault();
+    const getSearchMusic = async () => {
+      try {
+        const res = await axios.get(
+          `https://gj05ju1755.execute-api.eu-west-1.amazonaws.com/dev/codechallenge/music/search/${x}`
+        );
+        setSearchMusic(res.data.items);
       } catch (error) {
         console.error(error);
       }
@@ -47,8 +69,26 @@ const App = () => {
   return (
     <div>
       <form>
-        <input type="text" onChange={(e) => setSearchWord(e.target.value)} />
+        <input
+          type="text"
+          onChange={(e) => setSearchWord(e.target.value)}
+          onFocus={() => setIsFocused(true)}
+        />
         <button onClick={(e) => handleSearch(e)}>search</button>
+        {isFocused && history.length && (
+          <>
+            {history.map((x, i) => (
+              <div key={i}>
+                <span
+                  style={{ cursor: "pointer" }}
+                  onClick={(e) => handleHistory(e, x)}
+                >
+                  {x}
+                </span>
+              </div>
+            ))}
+          </>
+        )}
       </form>
 
       <button onClick={() => setRandomButton(!randomButton)}>random</button>
