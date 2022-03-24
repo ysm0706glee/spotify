@@ -4,32 +4,76 @@ import "./App.css";
 
 const App = () => {
   const [randomMusic, setRamdomMusic] = useState([]);
-  const [randomButtom, setRandomButtom] = useState(false);
+  const [randomButton, setRandomButton] = useState(false);
+
+  const [searchWord, setSearchWord] = useState("");
+  const [searchMusic, setSearchMusic] = useState([]);
 
   useEffect(() => {
-    const getRandomSongs = async () => {
+    const getRandomMusic = async () => {
       try {
-        const response = await axios.get(
+        const res = await axios.get(
           "https://gj05ju1755.execute-api.eu-west-1.amazonaws.com/dev/codechallenge/music/random"
         );
-        setRamdomMusic(response.data.items);
+        setRamdomMusic(res.data.items);
       } catch (error) {
         console.error(error);
       }
     };
-    getRandomSongs();
-  }, [randomButtom]);
+    setSearchMusic([]);
+    getRandomMusic();
+  }, [randomButton]);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const getSearchMusic = async () => {
+      try {
+        const res = await axios.get(
+          `https://gj05ju1755.execute-api.eu-west-1.amazonaws.com/dev/codechallenge/music/search/${searchWord}`
+        );
+        setSearchMusic(res.data.items);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    setRamdomMusic([]);
+    getSearchMusic();
+  };
 
   return (
     <div>
-      <button onClick={() => setRandomButtom(!randomButtom)}>random</button>
+      <form>
+        <input type="text" onChange={(e) => setSearchWord(e.target.value)} />
+        <button onClick={(e) => handleSearch(e)}>search</button>
+      </form>
+
+      <button onClick={() => setRandomButton(!randomButton)}>random</button>
+
       {randomMusic.length &&
         randomMusic.map((x) => {
           return (
             <div key={x.id}>
               <img src={x.album.images[2].url} alt={x.album.name} />
               <span>{x.album.name}</span>
-              <span>{x.artists[0].name}</span>
+              <span>{x.album.artists[0].name}</span>
+              <a
+                rel="noreferrer"
+                href={x.album.external_urls.spotify}
+                target="_blank"
+              >
+                listen
+              </a>
+            </div>
+          );
+        })}
+
+      {searchMusic.length &&
+        searchMusic.map((x) => {
+          return (
+            <div key={x.id}>
+              <img src={x.album.images[2].url} alt={x.album.name} />
+              <span>{x.album.name}</span>
+              <span>{x.album.artists[0].name}</span>
               <a
                 rel="noreferrer"
                 href={x.album.external_urls.spotify}
