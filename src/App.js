@@ -9,6 +9,8 @@ const App = () => {
   const [searchWord, setSearchWord] = useState("");
   const [searchMusic, setSearchMusic] = useState([]);
 
+  const [filterByDurationButton, setFilterByDuration] = useState(false);
+
   useEffect(() => {
     const getRandomMusic = async () => {
       try {
@@ -21,6 +23,7 @@ const App = () => {
       }
     };
     setSearchMusic([]);
+    setFilterByDuration(false);
     getRandomMusic();
   }, [randomButton]);
 
@@ -37,6 +40,7 @@ const App = () => {
       }
     };
     setRamdomMusic([]);
+    setFilterByDuration(false);
     getSearchMusic();
   };
 
@@ -49,41 +53,69 @@ const App = () => {
 
       <button onClick={() => setRandomButton(!randomButton)}>random</button>
 
+      <button onClick={() => setFilterByDuration(!filterByDurationButton)}>
+        filter by duration
+      </button>
+
       {randomMusic.length &&
-        randomMusic.map((x) => {
-          return (
-            <div key={x.id}>
-              <img src={x.album.images[2].url} alt={x.album.name} />
-              <span>{x.album.name}</span>
-              <span>{x.album.artists[0].name}</span>
-              <a
-                rel="noreferrer"
-                href={x.album.external_urls.spotify}
-                target="_blank"
-              >
-                listen
-              </a>
-            </div>
-          );
-        })}
+        randomMusic
+          .sort((a, b) => {
+            if (filterByDurationButton) {
+              return (
+                Math.floor((a.duration_ms % 3600) / 60) -
+                Math.floor((b.duration_ms % 3600) / 60)
+              );
+            } else {
+              return randomMusic;
+            }
+          })
+          .map((x) => {
+            return (
+              <div key={x.id}>
+                <img src={x.album.images[2].url} alt={x.album.name} />
+                <span>{x.album.name}</span>
+                <span>{x.album.artists[0].name}</span>
+                <a
+                  rel="noreferrer"
+                  href={x.album.external_urls.spotify}
+                  target="_blank"
+                >
+                  listen
+                </a>
+                <span>{Math.floor((x.duration_ms % 3600) / 60)}</span>
+              </div>
+            );
+          })}
 
       {searchMusic.length &&
-        searchMusic.map((x) => {
-          return (
-            <div key={x.id}>
-              <img src={x.album.images[2].url} alt={x.album.name} />
-              <span>{x.album.name}</span>
-              <span>{x.album.artists[0].name}</span>
-              <a
-                rel="noreferrer"
-                href={x.album.external_urls.spotify}
-                target="_blank"
-              >
-                listen
-              </a>
-            </div>
-          );
-        })}
+        searchMusic
+          .sort((a, b) => {
+            if (filterByDurationButton) {
+              return (
+                Math.floor((a.duration_ms % 3600) / 60) -
+                Math.floor((b.duration_ms % 3600) / 60)
+              );
+            } else {
+              return searchMusic;
+            }
+          })
+          .map((x) => {
+            return (
+              <div key={x.id}>
+                <img src={x.album.images[2].url} alt={x.album.name} />
+                <span>{x.album.name}</span>
+                <span>{x.album.artists[0].name}</span>
+                <a
+                  rel="noreferrer"
+                  href={x.album.external_urls.spotify}
+                  target="_blank"
+                >
+                  listen
+                </a>
+                <span>{Math.floor((x.duration_ms % 3600) / 60)}</span>
+              </div>
+            );
+          })}
     </div>
   );
 };
