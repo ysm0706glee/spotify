@@ -4,9 +4,9 @@ import axios from "axios";
 export const theme = createTheme({
   palette: {
     primary: {
-      main: "#F18D5F",
-      contrastText: "#ffffff",
+      main: "#6667AB",
     },
+    mode: "dark",
   },
 });
 

@@ -4,10 +4,10 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 
-const SearchMusic = ({ searchMusic, filterByDurationButton }) => {
+const Music = ({ music, filterByDurationButton }) => {
   return (
     <>
-      {searchMusic
+      {music
         .sort((a, b) => {
           if (filterByDurationButton) {
             return (
@@ -15,7 +15,7 @@ const SearchMusic = ({ searchMusic, filterByDurationButton }) => {
               Math.floor((b.duration_ms % 3600) / 60)
             );
           } else {
-            return searchMusic;
+            return music;
           }
         })
         .map((x) => {
@@ -43,7 +43,7 @@ const SearchMusic = ({ searchMusic, filterByDurationButton }) => {
                           right: "30%",
                           borderRadius: "50%",
                           border: "0px none",
-                          backgroundColor: "black",
+                          backgroundColor: "#000000",
                           color: "#1DB954",
                         }}
                       ></PlayCircleIcon>
@@ -70,4 +70,4 @@ const SearchMusic = ({ searchMusic, filterByDurationButton }) => {
   );
 };
 
-export default SearchMusic;
+export default Music;
