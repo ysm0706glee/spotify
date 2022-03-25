@@ -16,6 +16,7 @@ const Form = ({
   isFocused,
   history,
   handleHistory,
+  searchWord,
 }) => {
   return (
     <Box sx={{ marginTop: "1rem" }}>
@@ -27,6 +28,7 @@ const Form = ({
               <SearchIcon />
             </InputAdornment>
           }
+          value={searchWord}
           onChange={(e) => setSearchWord(e.target.value)}
           onFocus={() => setIsFocused(true)}
         />

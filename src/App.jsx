@@ -49,6 +49,7 @@ const App = () => {
     );
 
     setHistory([searchWord, ...history]);
+    setSearchWord("");
     setIsFocused(false);
   };
 
@@ -84,6 +85,7 @@ const App = () => {
                 isFocused={isFocused}
                 history={history}
                 handleHistory={handleHistory}
+                searchWord={searchWord}
               />
             </Grid>
 
