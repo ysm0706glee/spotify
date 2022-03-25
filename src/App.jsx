@@ -1,19 +1,16 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
-import "./App.css";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import { ThemeProvider } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
 
 import Form from "./components/Form";
 import RandomMusic from "./components/RandomMusic";
 import SearchMusic from "./components/SearchMusic";
 
-const getData = async (url, setFuc) => {
-  try {
-    const res = await axios.get(url);
-    setFuc(res.data.items);
-  } catch (error) {
-    console.error(error);
-  }
-};
+import { theme, getData } from "./utils";
 
 const App = () => {
   const [randomMusic, setRamdomMusic] = useState([]);
@@ -65,36 +62,80 @@ const App = () => {
   };
 
   return (
-    <div>
-      <Form
-        setSearchWord={setSearchWord}
-        setIsFocused={setIsFocused}
-        handleSearch={handleSearch}
-        isFocused={isFocused}
-        history={history}
-        handleHistory={handleHistory}
-      />
+    <Container>
+      <Box sx={{ flexGrow: 1 }}>
+        <Grid
+          container
+          spacing={3}
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Grid item xs={12}>
+            <Form
+              setSearchWord={setSearchWord}
+              setIsFocused={setIsFocused}
+              handleSearch={handleSearch}
+              isFocused={isFocused}
+              history={history}
+              handleHistory={handleHistory}
+            />
+          </Grid>
 
-      <button onClick={() => setRandomButton(!randomButton)}>random</button>
+          <Grid item xs={12}>
+            <Typography variant="caption">OR</Typography>
+          </Grid>
 
-      <button onClick={() => setFilterByDuration(!filterByDurationButton)}>
-        filter by duration
-      </button>
+          <Grid item xs={12}>
+            <ThemeProvider theme={theme}>
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={() => setRandomButton(!randomButton)}
+              >
+                random
+              </Button>
+            </ThemeProvider>
+          </Grid>
+
+          <Grid item xs={12} alignSelf="end">
+            <ThemeProvider theme={theme}>
+              <Button
+                color="primary"
+                sx={{
+                  marginBottom: "0.5rem",
+                }}
+                onClick={() => setFilterByDuration(!filterByDurationButton)}
+              >
+                by duration
+              </Button>
+            </ThemeProvider>
+          </Grid>
+        </Grid>
+      </Box>
 
       {randomMusic.length && (
-        <RandomMusic
-          randomMusic={randomMusic}
-          filterByDurationButton={filterByDurationButton}
-        />
+        <>
+          <Grid container spacing={3}>
+            <RandomMusic
+              randomMusic={randomMusic}
+              filterByDurationButton={filterByDurationButton}
+            />
+          </Grid>
+        </>
       )}
 
       {searchMusic.length && (
-        <SearchMusic
-          searchMusic={searchMusic}
-          filterByDurationButton={filterByDurationButton}
-        />
+        <>
+          <Grid container spacing={3}>
+            <SearchMusic
+              searchMusic={searchMusic}
+              filterByDurationButton={filterByDurationButton}
+            />
+          </Grid>
+        </>
       )}
-    </div>
+    </Container>
   );
 };
 

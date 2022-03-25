@@ -1,3 +1,9 @@
+import Paper from "@mui/material/Paper";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import PlayCircleIcon from "@mui/icons-material/PlayCircle";
+
 const SearchMusic = ({ searchMusic, filterByDurationButton }) => {
   return (
     <>
@@ -14,19 +20,50 @@ const SearchMusic = ({ searchMusic, filterByDurationButton }) => {
         })
         .map((x) => {
           return (
-            <div key={x.id}>
-              <img src={x.album.images[2].url} alt={x.album.name} />
-              <span>{x.album.name}</span>
-              <span>{x.album.artists[0].name}</span>
-              <a
-                rel="noreferrer"
-                href={x.album.external_urls.spotify}
-                target="_blank"
-              >
-                listen
-              </a>
-              <span>{Math.floor((x.duration_ms % 3600) / 60)}</span>
-            </div>
+            <Grid key={x.id} item xs={12}>
+              <Paper elevation={3}>
+                <Box
+                  padding={1}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Box sx={{ display: "flex", flexDirection: "row" }}>
+                    <a
+                      rel="noreferrer"
+                      href={x.album.external_urls.spotify}
+                      target="_blank"
+                    >
+                      <img src={x.album.images[2].url} alt={x.album.name} />
+                      <PlayCircleIcon
+                        sx={{
+                          position: "relative",
+                          right: "30%",
+                          borderRadius: "50%",
+                          border: "0px none",
+                          backgroundColor: "black",
+                          color: "#1DB954",
+                        }}
+                      ></PlayCircleIcon>
+                    </a>
+                    <Box>
+                      <Typography variant="subtitle1">
+                        {x.album.name}
+                      </Typography>
+                      <Typography variant="subtitle2">
+                        {x.album.artists[0].name}
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <Typography variant="caption" display="block" gutterBottom>
+                    {Math.floor((x.duration_ms % 3600) / 60)} minutes
+                  </Typography>
+                </Box>
+              </Paper>
+            </Grid>
           );
         })}
     </>
